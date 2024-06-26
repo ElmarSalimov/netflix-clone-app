@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:netflix_clone/components/last_onboarding_tile.dart';
 import 'package:netflix_clone/pages/home_page.dart';
+import 'package:netflix_clone/pages/login_page.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:netflix_clone/components/onboarding_tile.dart';
 
@@ -101,14 +102,19 @@ class OnboardingScreen extends StatelessWidget {
             child: GestureDetector(
               onTap: () => Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => const HomePage())),
-              child: Container(
-                height: 50,
-                decoration: BoxDecoration(
-                    color: const Color.fromARGB(255, 255, 17, 0),
-                    borderRadius: BorderRadius.circular(4)),
-                child: const Center(
-                  child: Text("SIGN IN",
-                      style: TextStyle(color: Colors.white, fontSize: 20)),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoginPage()));
+                },
+                child: Container(
+                  height: 50,
+                  decoration: BoxDecoration(
+                      color: const Color.fromARGB(255, 255, 17, 0),
+                      borderRadius: BorderRadius.circular(4)),
+                  child: const Center(
+                    child: Text("SIGN IN",
+                        style: TextStyle(color: Colors.white, fontSize: 20)),
+                  ),
                 ),
               ),
             ),
