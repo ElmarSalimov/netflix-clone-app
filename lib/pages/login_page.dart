@@ -46,7 +46,6 @@ class _LoginPageState extends State<LoginPage> {
                 fillColor: Color.fromRGBO(64, 61, 61, 1),
                 border: OutlineInputBorder(borderSide: BorderSide()),
                 labelText: 'Email or phone number',
-
                 //solve hinttext problem
                 floatingLabelBehavior: FloatingLabelBehavior.never,
                 labelStyle: TextStyle(color: Colors.white54),
