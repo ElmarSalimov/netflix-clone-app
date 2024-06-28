@@ -14,44 +14,38 @@ class OnboardingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
+
       // Netflix icon and Privacy and Help tab
       appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: Column(
-                  children: [
-                    GestureDetector(
-                      child: Image.asset(
-                        'lib/assets/netflix-icon.png',
-                        width: 100,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const Row(
-                children: [
-                  Text("Privacy",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20)),
-                  SizedBox(
-                    width: 15,
-                  ),
-                  Text("Help",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20))
-                ],
-              )
-            ],
-          )),
+        backgroundColor: Colors.transparent,
+        leading: Container(
+          margin: const EdgeInsets.only(left: 20),
+          child: Image.asset(
+            'lib/assets/netflix-icon.png',
+          ),
+        ),
+        leadingWidth: 120,
+
+        actions: const [
+          Text("Privacy",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20)),
+          SizedBox(
+            width: 15,
+          ),
+          Text("Help",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20)),
+          SizedBox(
+            width: 15,
+          ),
+        ],
+      ),
+      
       body: Stack(
         children: [
           // Main Screen
@@ -82,7 +76,7 @@ class OnboardingScreen extends StatelessWidget {
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
-              margin: const EdgeInsets.only(bottom: 60),
+              margin: const EdgeInsets.only(bottom: 80),
               padding: const EdgeInsets.all(8.0),
               child: SmoothPageIndicator(
                 controller: controller,
@@ -104,9 +98,11 @@ class OnboardingScreen extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => const HomePage())),
               child: GestureDetector(
                 onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoginPage()));
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => LoginPage()));
                 },
                 child: Container(
+                  margin: const EdgeInsets.only(bottom: 20),
                   height: 50,
                   decoration: BoxDecoration(
                       color: const Color.fromARGB(255, 255, 17, 0),
