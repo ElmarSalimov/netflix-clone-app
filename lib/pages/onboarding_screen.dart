@@ -99,7 +99,7 @@ class OnboardingScreen extends StatelessWidget {
               child: GestureDetector(
                 onTap: () {
                   Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => LoginPage()));
+                      MaterialPageRoute(builder: (context) => const LoginPage()));
                 },
                 child: Container(
                   margin: const EdgeInsets.only(bottom: 20),

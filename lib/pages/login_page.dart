@@ -73,18 +73,23 @@ class _LoginPageState extends State<LoginPage> {
           // Sign In
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8),
-            child: Container(
-              height: 40,
-              margin: const EdgeInsets.symmetric(horizontal: 48),
-              decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 255, 17, 0),
-                  borderRadius: BorderRadius.circular(4)),
-              child: const Center(
-                child: Text("Sign In",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold)),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => const HomePage()));
+              },
+              child: Container(
+                height: 40,
+                margin: const EdgeInsets.symmetric(horizontal: 48),
+                decoration: BoxDecoration(
+                    color: const Color.fromARGB(255, 255, 17, 0),
+                    borderRadius: BorderRadius.circular(4)),
+                child: const Center(
+                  child: Text("Sign In",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold)),
+                ),
               ),
             ),
           ),
