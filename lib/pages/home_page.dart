@@ -1,7 +1,5 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:netflix_clone/models/upcoming_movie.dart';
-import 'package:netflix_clone/pages/onboarding_screen.dart';
 import 'package:netflix_clone/services/api.dart';
 import 'package:netflix_clone/widgets/movie_slide.dart';
 
@@ -25,37 +23,28 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          // Remove the back button
-          automaticallyImplyLeading: false,
-          flexibleSpace: ClipRect(
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 7, sigmaY: 7),
-              child: Container(
-                color: Colors.transparent,
-              ),
-            ),
-          ),
-        ),
-        body: SingleChildScrollView(
-          child: Column(
+      body: SingleChildScrollView(
+        child: Column(
             children: [
-              FutureBuilder(
+              
+              const SizedBox(
+                height: 20,
+              ),
+              SizedBox(
+                height: 220,
+                child: UpcomingMovieCard(
                   future: getUpcomingMovie,
-                  builder: ((context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
-                    }
-                    return MovieSlide(
-                        future: getUpcomingMovie, headlineText: "Upcoming");
-                  }))
+                  headlineText: 'Upcoming Movies',
+                ),
+              ),
+              
+              const SizedBox(
+                height: 20,
+              ),
+              const Center(child: Text("Hello world!"),)
             ],
           ),
-        )
-
-        // floatingActionButton: FloatingActionButton(
-        //     onPressed: () => Navigator.of(context).push(
-        //         MaterialPageRoute(builder: (context) => OnboardingScreen()))),
-        );
+      ),
+      );
   }
 }
