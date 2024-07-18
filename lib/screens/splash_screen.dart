@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:lottie/lottie.dart';
-import 'package:netflix_clone/pages/onboarding_screen.dart';
+import 'package:netflix_clone/screens/onboarding_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:netflix_clone/components/last_onboarding_tile.dart';
+import 'package:netflix_clone/widgets/last_onboarding_tile.dart';
 import 'package:netflix_clone/pages/home_page.dart';
-import 'package:netflix_clone/pages/login_page.dart';
+import 'package:netflix_clone/screens/login_screen.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:netflix_clone/components/onboarding_tile.dart';
+import 'package:netflix_clone/widgets/onboarding_tile.dart';
 
 class OnboardingScreen extends StatelessWidget {
   final controller = PageController();
