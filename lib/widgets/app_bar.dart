@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const MyAppBar({super.key});
+  final controller;
+  const MyAppBar({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -28,41 +29,45 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
           child: Align(
             alignment: Alignment.centerLeft,
             child: SizedBox(
-              width: MediaQuery.of(context).size.width / 2.2,
-              height: 30,
-              child: TabBar(
-                  dividerColor: Colors.transparent,
-                  automaticIndicatorColorAdjustment: true,
-                  indicator: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      color: Colors.grey.shade800),
-                  tabs: [
-                    Tab(
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: Text("Movies",
-                            style: GoogleFonts.openSans(
-                              textStyle: const TextStyle(
-                                  fontSize: 14, color: Colors.white),
-                            )),
+              width: MediaQuery.of(context).size.width / 2,
+              height: 35,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                child: TabBar(
+                    controller: controller,
+                    dividerColor: Colors.transparent,
+                    automaticIndicatorColorAdjustment: true,
+                    indicator: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: Colors.grey.shade800),
+                    tabs: [
+                      Tab(
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Text("Movies",
+                              style: GoogleFonts.openSans(
+                                textStyle: const TextStyle(
+                                    fontSize: 14, color: Colors.white),
+                              )),
+                        ),
                       ),
-                    ),
-                    Tab(
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: Text("TV Shows",
-                            style: GoogleFonts.openSans(
-                              textStyle: const TextStyle(
-                                  fontSize: 14, color: Colors.white),
-                            )),
+                      Tab(
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Text("TV Shows",
+                              style: GoogleFonts.openSans(
+                                textStyle: const TextStyle(
+                                    fontSize: 14, color: Colors.white),
+                              )),
+                        ),
                       ),
-                    ),
-                  ]),
+                    ]),
+              ),
             ),
           )),
     );
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(70);
+  Size get preferredSize => const Size.fromHeight(80);
 }
