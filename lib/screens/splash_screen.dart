@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'dart:async';
 import 'package:lottie/lottie.dart';
-import 'package:netflix_clone/screens/onboarding_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -18,7 +18,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Timer(
       const Duration(seconds: 3, milliseconds: 500), 
       (){
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => OnboardingScreen()));
+        context.go('/onboardingScreen');
       }
     );
   }

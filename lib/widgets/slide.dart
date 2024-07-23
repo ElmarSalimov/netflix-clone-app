@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:netflix_clone/models/movie.dart';
 import 'package:netflix_clone/util/constants.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class MovieSlide extends StatelessWidget {
-  final List<Movie> movies;
+class Slide extends StatelessWidget {
+  final List list;
   final String headlineText;
+  final String type;
   final ScrollController controller;
 
-  const MovieSlide({
+  const Slide({
     super.key,
-    required this.movies,
+    required this.list,
     required this.headlineText,
+    required this.type,
     required this.controller,
   });
 
@@ -38,9 +39,9 @@ class MovieSlide extends StatelessWidget {
             child: ListView.builder(
               controller: controller,
               scrollDirection: Axis.horizontal,
-              itemCount: movies.length,
+              itemCount: list.length,
               itemBuilder: (BuildContext context, int index) {
-                final Movie result = movies[index];
+                final result = list[index];
                 return Container(
                   margin:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
