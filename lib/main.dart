@@ -4,6 +4,7 @@ import 'package:netflix_clone/pages/home_page.dart';
 import 'package:netflix_clone/pages/profile_page.dart';
 import 'package:netflix_clone/pages/search_page.dart';
 import 'package:netflix_clone/provider/movie_provider.dart';
+import 'package:netflix_clone/provider/page_provider.dart';
 import 'package:netflix_clone/screens/home_screen.dart';
 import 'package:netflix_clone/screens/login_screen.dart';
 import 'package:netflix_clone/screens/onboarding_screen.dart';
@@ -57,8 +58,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => MovieProvider(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => MovieProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => PageProvider(),
+        ),
+      ],
       child: MaterialApp.router(
         routerConfig: _router,
         debugShowCheckedModeBanner: false,

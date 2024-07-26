@@ -3,15 +3,15 @@ import 'package:netflix_clone/provider/movie_provider.dart';
 import 'package:netflix_clone/widgets/slide.dart';
 import 'package:provider/provider.dart';
 
-class MovieWidget extends StatefulWidget {
-  const MovieWidget({super.key});
+class SlideWidget extends StatefulWidget {
+  const SlideWidget({super.key});
 
   @override
-  _MovieWidgetState createState() => _MovieWidgetState();
+  _SlideWidgetState createState() => _SlideWidgetState();
 }
 
-class _MovieWidgetState extends State<MovieWidget>
-    with AutomaticKeepAliveClientMixin<MovieWidget> {
+class _SlideWidgetState extends State<SlideWidget>
+    with AutomaticKeepAliveClientMixin<SlideWidget> {
   @override
   bool get wantKeepAlive => true;
   final ScrollController controller = ScrollController();
@@ -24,9 +24,6 @@ class _MovieWidgetState extends State<MovieWidget>
       child: Consumer<MovieProvider>(
         builder: (context, movieProvider, child) => Column(
           children: [
-            const SizedBox(
-              height: 80,
-            ),
             Slide(
               list: movieProvider.upcomingMovies,
               headlineText: "Upcoming",
@@ -53,10 +50,32 @@ class _MovieWidgetState extends State<MovieWidget>
                 controller: movieProvider.nowPlayingController),
             const SizedBox(height: 10),
             Slide(
-                list: movieProvider.actionMovies,
-                headlineText: "Action",
-                type: "Movie",
-                controller: movieProvider.actionController),
+              list: movieProvider.popularTvShows,
+              headlineText: "Popular",
+              type: "TvShow",
+              controller: movieProvider.popularTvController,
+            ),
+            const SizedBox(height: 10),
+            Slide(
+              list: movieProvider.topRatedTvShows,
+              headlineText: "Top Rated",
+              type: "TvShow",
+              controller: movieProvider.topRatedTvController,
+            ),
+            const SizedBox(height: 10),
+            Slide(
+              list: movieProvider.airingTvShows,
+              headlineText: "On The Air",
+              type: "TvShow",
+              controller: movieProvider.airingTvController,
+            ),
+            const SizedBox(height: 10),
+            Slide(
+              list: movieProvider.dramaTvShows,
+              headlineText: "Drama",
+              type: "TvShow",
+              controller: movieProvider.dramaTvController,
+            ),
           ],
         ),
       ),
