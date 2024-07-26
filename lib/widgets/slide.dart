@@ -19,7 +19,7 @@ class Slide extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 280,
+      height: 240,
       child: Column(
         children: [
           Row(
@@ -31,7 +31,7 @@ class Slide extends StatelessWidget {
                 child: Text(headlineText,
                     style: GoogleFonts.openSans(
                         textStyle: const TextStyle(
-                            fontSize: 22, color: Colors.white))),
+                            fontSize: 18, color: Colors.white))),
               ),
             ],
           ),
