@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:netflix_clone/provider/movie_provider.dart';
 import 'package:netflix_clone/widgets/home_page_bar.dart';
-import 'package:netflix_clone/widgets/slide_widget.dart';
+import 'package:netflix_clone/widgets/home_slide_widget.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -11,7 +11,8 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
+class _HomePageState extends State<HomePage>
+    with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   final ScrollController controller = ScrollController();
   bool isMovie = true;
   bool isTvShow = false;
@@ -63,14 +64,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return CustomScrollView(
       controller: controller,
       slivers: <Widget>[
         SliverPersistentHeader(
           pinned: true,
           delegate: HomePageBar(
-            minExtent: 100,
-            maxExtent: 100,
+            minExtent: 110,
+            maxExtent: 110,
             isMovie: isMovie,
             isTvShow: isTvShow,
             onFilterChanged: _updateFilter,
@@ -102,4 +104,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       ],
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

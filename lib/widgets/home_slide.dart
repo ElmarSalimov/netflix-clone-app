@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:netflix_clone/util/constants.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:netflix_clone/widgets/movie_detail.dart';
 
-class Slide extends StatelessWidget {
+class HomeSlide extends StatelessWidget {
   final List list;
   final String headlineText;
   final String type;
   final ScrollController controller;
 
-  const Slide({
+  const HomeSlide({
     super.key,
     required this.list,
     required this.headlineText,
@@ -45,9 +46,13 @@ class Slide extends StatelessWidget {
                 return Container(
                   margin:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  child: Image.network(
-                    '$imageUrl${result.posterPath}',
-                    fit: BoxFit.cover,
+                  child: GestureDetector(
+                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => MovieDetailScreen(movieId: result.id))),
+                    child: Image.network(
+                      '$imageUrl${result.posterPath}',
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 );
               },

@@ -1,4 +1,7 @@
 import 'dart:convert';
+import 'package:netflix_clone/models/movie_detail.dart';
+import 'package:netflix_clone/models/movie_recommendation.dart';
+import 'package:netflix_clone/models/search_model.dart';
 import 'package:netflix_clone/models/tv_show.dart';
 import 'package:netflix_clone/util/constants.dart';
 import 'package:netflix_clone/models/movie.dart';
@@ -156,7 +159,8 @@ class ApiService {
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body)['results'] as List;
-      final List<TvShow> tvShowList = data.map((e) => TvShow.fromJson(e)).toList();
+      final List<TvShow> tvShowList =
+          data.map((e) => TvShow.fromJson(e)).toList();
       dramaTvPage++;
       return tvShowList;
     }
@@ -170,10 +174,57 @@ class ApiService {
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body)['results'] as List;
-      final List<TvShow> tvShowList = data.map((e) => TvShow.fromJson(e)).toList();
+      final List<TvShow> tvShowList =
+          data.map((e) => TvShow.fromJson(e)).toList();
       animationTvPage++;
       return tvShowList;
     }
     throw Exception("Fail");
   }
+
+  Future<SearchModel> getSearchedMovie(String searchText) async {
+    final url =
+        'https://api.themoviedb.org/3/search/movie?api_key=bb8c312901e0da98908810ed6cc6ecad&query=$searchText';
+    final response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      return SearchModel.fromJson(jsonDecode(response.body));
+    }
+    throw Exception('Fail');
+  }
+
+  Future<SearchModel> getSearchedTvShow(String searchText) async {
+    final url =
+        'https://api.themoviedb.org/3/search/tv?api_key=bb8c312901e0da98908810ed6cc6ecad&query=$searchText';
+    final response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      return SearchModel.fromJson(jsonDecode(response.body));
+    }
+    throw Exception('Fail');
+  }
+
+  Future<MovieDetail> getMovieDetail(int movieId) async {
+    final endPoint = 'movie/$movieId';
+    final url = '$baseUrl$endPoint$key';
+
+    final response = await http.get(Uri.parse(url));
+    if (response.statusCode == 200) {
+      return MovieDetail.fromJson(jsonDecode(response.body));
+    }
+    throw Exception('Fail');
+  }
+
+  Future<MovieRecommendation> getMovieRecommendations(int movieId) async {
+    final endPoint = 'movie/$movieId/recommendations';
+    final url = '$baseUrl$endPoint$key';
+
+    final response = await http.get(Uri.parse(url));
+    if (response.statusCode == 200) {
+      return MovieRecommendation.fromJson(jsonDecode(response.body));
+    }
+    throw Exception('Fail');
+  }
+  
+  
 }
