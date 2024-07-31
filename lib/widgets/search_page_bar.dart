@@ -12,15 +12,16 @@ class SearchPageBar extends SliverPersistentHeaderDelegate {
 
   @override
   final double maxExtent;
+  final TextEditingController controller;
 
   SearchPageBar({
     required this.minExtent,
     required this.maxExtent,
+    required this.controller,
   });
 
   @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
     final pageProvider = Provider.of<PageProvider>(context, listen: false);
     return Stack(
       fit: StackFit.expand,
@@ -39,32 +40,37 @@ class SearchPageBar extends SliverPersistentHeaderDelegate {
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(12),
-          child: Row(
-            children: [
-              IconButton(
-                onPressed: () {
-                  pageProvider.setIndex(0);
-                  context.go('/homePage');
-                },
-                icon: const Icon(Icons.arrow_back_ios),
-              ),
-              const SizedBox(width: 8),
-              const Icon(LucideIcons.search, color: Colors.white),
-              const SizedBox(width: 8),
-              Expanded(
-                child: TextField(
-                  decoration: InputDecoration(
-                    hintText: 'Search',
-                    hintStyle: GoogleFonts.lato(color: Colors.white54),
-                    border: InputBorder.none,
-                  ),
-                  style: GoogleFonts.lato(color: Colors.white),
-                  cursorColor: Colors.white,
+        Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                IconButton(
+                  onPressed: () {
+                    pageProvider.setIndex(0);
+                    context.go('/homePage');
+                  },
+                  icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
                 ),
-              ),
-            ],
+                const SizedBox(width: 8),
+                const Icon(LucideIcons.search, color: Colors.white),
+                const SizedBox(width: 8),
+                Flexible(
+                  child: TextField(
+                    controller: controller,
+                    decoration: InputDecoration(
+                      hintText: 'Search',
+                      hintStyle: GoogleFonts.lato(color: Colors.white54),
+                      border: InputBorder.none,
+                    ),
+                    style: GoogleFonts.lato(color: Colors.white),
+                    cursorColor: Colors.white,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ],

@@ -14,6 +14,7 @@ class MovieProvider extends ChangeNotifier {
   List<Movie> nowPlayingMovies = [];
   List<Movie> actionMovies = [];
   List<Movie> horrorMovies = [];
+  List<Movie> topSearches = [];
 
   List<TvShow> popularTvShows = [];
   List<TvShow> topRatedTvShows = [];
@@ -62,6 +63,12 @@ class MovieProvider extends ChangeNotifier {
     airingTvController.addListener(_airingTvListener);
     dramaTvController.addListener(_dramaTvListener);
     animationTvController.addListener(_animationTvListener);
+  }
+
+    Future<void> fetchTopSearches() async {
+    List<Movie> newMovies = await apiServices.getPopularMovies();
+    topSearches.addAll(newMovies);
+    notifyListeners();
   }
 
   Future<void> fetchUpcomingMovies() async {
@@ -182,6 +189,7 @@ class MovieProvider extends ChangeNotifier {
     fetchNowPlayingMovies();
     fetchActionMovies();
     fetchHorrorMovies();
+    fetchTopSearches();
     
     fetchPopularTvShows();
     fetchTopRatedTvShows();
