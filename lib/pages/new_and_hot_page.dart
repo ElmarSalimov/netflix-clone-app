@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:netflix_clone/widgets/home_page_bar.dart';
-import 'package:netflix_clone/widgets/home_slide_widget.dart';
+import 'package:netflix_clone/services/api.dart';
+import 'package:netflix_clone/widgets/new_and_hot_bar.dart';
+import 'package:netflix_clone/widgets/new_and_hot_widget.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class NewAndHotPage extends StatefulWidget {
+  const NewAndHotPage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<NewAndHotPage> createState() => _NewAndHotPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _NewAndHotPageState extends State<NewAndHotPage> {
+  ApiService apiServices = ApiService();
   final ScrollController controller = ScrollController();
-  bool isMovie = true;
-  bool isTvShow = false;
+  bool isFirst = true;
+  bool isSecond = false;
 
   @override
   void initState() {
@@ -28,27 +30,27 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _scrollListener() {
-    if (controller.offset < 600) {
+    if (controller.offset < 3000) {
       setState(() {
-        isMovie = true;
-        isTvShow = false;
+        isFirst = true;
+        isSecond = false;
       });
-    } else if (controller.offset > 600) {
+    } else if (controller.offset > 3000) {
       setState(() {
-        isMovie = false;
-        isTvShow = true;
+        isFirst = false;
+        isSecond = true;
       });
     }
   }
 
-  void _updateFilter(bool movieSelected) async {
+  void _updateFilter(bool selected) async {
     setState(() {
-      isMovie = movieSelected;
-      isTvShow = !movieSelected;
+      isFirst = selected;
+      isSecond = !selected;
     });
     controller.removeListener(_scrollListener);
     await controller.animateTo(
-      isTvShow ? 600 : 0,
+      isSecond ? 3000 : 0,
       duration: const Duration(milliseconds: 300), // Duration of the animation
       curve: Curves.easeInOut, // Curve of the animation
     );
@@ -62,16 +64,15 @@ class _HomePageState extends State<HomePage> {
       slivers: <Widget>[
         SliverPersistentHeader(
           pinned: true,
-          delegate: HomePageBar(
-            minExtent: 110,
-            maxExtent: 110,
-            isMovie: isMovie,
-            isTvShow: isTvShow,
-            onFilterChanged: _updateFilter,
-          ),
+          delegate: NewAndHotBar(
+              minExtent: 110,
+              maxExtent: 110,
+              isFirst: isFirst,
+              isSecond: isSecond,
+              onFilterChanged: _updateFilter),
         ),
         const SliverToBoxAdapter(
-          child: SlideWidget(),
+          child: NewAndHotWidget(),
         ),
       ],
     );

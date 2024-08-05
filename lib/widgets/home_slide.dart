@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:netflix_clone/util/constants.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:netflix_clone/widgets/movie_detail.dart';
+import 'package:shimmer/shimmer.dart';
 
 class HomeSlide extends StatelessWidget {
   final List list;
@@ -46,13 +46,23 @@ class HomeSlide extends StatelessWidget {
                 return Container(
                   margin:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  child: GestureDetector(
-                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => MovieDetailScreen(movieId: result.id))),
-                    child: Image.network(
-                      '$imageUrl${result.posterPath}',
-                      fit: BoxFit.cover,
-                    ),
+                  child: Image.network(
+                    '$imageUrl${result.posterPath}',
+                    fit: BoxFit.cover,
+                    loadingBuilder: (BuildContext ctx, Widget child,
+                        ImageChunkEvent? loadingProgress) {
+                      if (loadingProgress == null) {
+                        return child; // The image has finished loading
+                      } else {
+                        return Shimmer.fromColors(
+                          baseColor: Colors.grey[300]!,
+                          highlightColor: Colors.grey[100]!,
+                          child: Container(
+                            color: Colors.grey[300],
+                          ),
+                        );
+                      }
+                    },
                   ),
                 );
               },

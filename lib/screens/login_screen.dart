@@ -21,7 +21,7 @@ class _LoginScreenState extends State<LoginScreen> {
         backgroundColor: Colors.transparent,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => context.go('/onboardingScreen'),
         ),
         title: Image.asset(
           'lib/assets/netflix-icon.png',
