@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:netflix_clone/models/movie_detail.dart';
-import 'package:netflix_clone/models/movie_recommendation.dart';
+import 'package:netflix_clone/models/tv_show_detail.dart';
+import 'package:netflix_clone/models/tv_show_recommendation.dart';
 import 'package:netflix_clone/services/api.dart';
 import 'package:netflix_clone/util/constants.dart';
 
-class MovieDetailScreen extends StatefulWidget {
-  final int movieId;
-  const MovieDetailScreen({super.key, required this.movieId});
+class TvShowDetailWidget extends StatefulWidget {
+  final int tvShowId;
+  const TvShowDetailWidget({super.key, required this.tvShowId});
 
   @override
-  MovieDetailScreenState createState() => MovieDetailScreenState();
+  TvShowDetailWidgetState createState() => TvShowDetailWidgetState();
 }
 
-class MovieDetailScreenState extends State<MovieDetailScreen> {
+class TvShowDetailWidgetState extends State<TvShowDetailWidget> {
   ApiService apiServices = ApiService();
 
-  late Future<MovieDetail> movieDetail;
-  late Future<MovieRecommendation> movieRecommendation;
+  late Future<TvShowDetail> tvShowDetail;
+  late Future<TvShowRecommendation> tvShowRecommendation;
 
   @override
   void initState() {
@@ -26,9 +26,9 @@ class MovieDetailScreenState extends State<MovieDetailScreen> {
   }
 
   fetchInitialData() {
-    movieDetail = apiServices.getMovieDetail(widget.movieId);
-    movieRecommendation = apiServices.getMovieRecommendations(widget.movieId);
-    setState(() {});
+    tvShowDetail = apiServices.getTvShowDetail(widget.tvShowId);
+    tvShowRecommendation = apiServices.getTvShowRecommendations(widget.tvShowId);
+    setState(() {});  
   }
 
   @override
@@ -37,14 +37,13 @@ class MovieDetailScreenState extends State<MovieDetailScreen> {
     return Scaffold(
       backgroundColor: Colors.black,
       body: SingleChildScrollView(
-        child: FutureBuilder<MovieDetail>(
-          future: movieDetail,
+        child: FutureBuilder<TvShowDetail>(
+          future: tvShowDetail,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              final movie = snapshot.data;
-
+              final tvShow = snapshot.data;
               String genresText =
-                  movie!.genres!.map((genre) => genre.name).join(', ');
+                  tvShow!.genres!.map((genre) => genre.name).join(', ');
 
               return Column(
                 children: [
@@ -55,7 +54,7 @@ class MovieDetailScreenState extends State<MovieDetailScreen> {
                         decoration: BoxDecoration(
                           image: DecorationImage(
                             image: NetworkImage(
-                              "$imageUrl${movie.posterPath}",
+                              "$imageUrl${tvShow.posterPath}",
                             ),
                             fit: BoxFit.cover,
                           ),
@@ -69,7 +68,7 @@ class MovieDetailScreenState extends State<MovieDetailScreen> {
                                 icon: const Icon(Icons.arrow_back_ios,
                                     color: Colors.white),
                                 onPressed: () {
-                                  Navigator.pop(context);
+                                  Navigator.of(context).pop();
                                 },
                               ),
                             ],
@@ -85,7 +84,7 @@ class MovieDetailScreenState extends State<MovieDetailScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          movie.title!,
+                          tvShow.name!,
                           style: GoogleFonts.lato(
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
@@ -96,7 +95,7 @@ class MovieDetailScreenState extends State<MovieDetailScreen> {
                         Row(
                           children: [
                             Text(
-                              movie.releaseDate.toString(),
+                              tvShow.firstAirDate.toString(),
                               style: GoogleFonts.lato(
                                 color: Colors.grey,
                               ),
@@ -117,7 +116,7 @@ class MovieDetailScreenState extends State<MovieDetailScreen> {
                           height: 30,
                         ),
                         Text(
-                          movie.overview!,
+                          tvShow.overview!,
                           maxLines: 6,
                           overflow: TextOverflow.ellipsis,
                           style: GoogleFonts.lato(
@@ -131,8 +130,8 @@ class MovieDetailScreenState extends State<MovieDetailScreen> {
                   const SizedBox(
                     height: 30,
                   ),
-                  FutureBuilder<MovieRecommendation>(
-                    future: movieRecommendation,
+                  FutureBuilder<TvShowRecommendation>(
+                    future: tvShowRecommendation,
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         final recommendation = snapshot.data;
@@ -167,12 +166,12 @@ class MovieDetailScreenState extends State<MovieDetailScreen> {
                                     itemBuilder: (context, index) {
                                       return InkWell(
                                         onTap: () {
-                                          Navigator.push(
+                                          Navigator.pushReplacement(
                                             context,
                                             MaterialPageRoute(
                                               builder: (context) =>
-                                                  MovieDetailScreen(
-                                                movieId: recommendation
+                                                  TvShowDetailWidget(
+                                                tvShowId: recommendation
                                                     .results![index].id!,
                                               ),
                                             ),
@@ -196,8 +195,10 @@ class MovieDetailScreenState extends State<MovieDetailScreen> {
                 ],
               );
             }
-            return const Center(
-              child: CircularProgressIndicator(),
+            return Center(
+              child: Center(
+                child: Text(snapshot.error.toString()),
+              ),
             );
           },
         ),

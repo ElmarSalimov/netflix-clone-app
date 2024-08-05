@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -26,18 +25,9 @@ class SearchPageBar extends SliverPersistentHeaderDelegate {
     return Stack(
       fit: StackFit.expand,
       children: <Widget>[
-        // Background content
         Container(
           decoration: const BoxDecoration(
-            color: Colors.transparent,
-          ),
-          child: ClipRect(
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
-              child: Container(
-                color: Colors.black.withAlpha(200),
-              ),
-            ),
+            color: Colors.black,
           ),
         ),
         Center(

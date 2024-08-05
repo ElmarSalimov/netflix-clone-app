@@ -11,9 +11,9 @@ class SearchPage extends StatefulWidget {
   State<SearchPage> createState() => _SearchPageState();
 }
 
-class _SearchPageState extends State<SearchPage>
-    with AutomaticKeepAliveClientMixin {
+class _SearchPageState extends State<SearchPage> {
   TextEditingController controller = TextEditingController();
+  ScrollController scrollController = ScrollController();
   Future<SearchModel>? movieSearchResults;
   Future<SearchModel>? tvShowSearchResults;
   ApiService apiServices = ApiService();
@@ -45,28 +45,29 @@ class _SearchPageState extends State<SearchPage>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
-    return CustomScrollView(
-      slivers: <Widget>[
-        SliverPersistentHeader(
-          pinned: true,
-          delegate: SearchPageBar(
-            minExtent: 110,
-            maxExtent: 110,
-            controller: controller,
+    return SafeArea(
+      child: CustomScrollView(
+        controller: scrollController,
+        slivers: <Widget>[
+          SliverPersistentHeader(
+            pinned: true,
+            delegate: SearchPageBar(
+              minExtent: 70,
+              maxExtent: 70,
+              controller: controller,
+            ),
           ),
-        ),
-        SliverToBoxAdapter(
-          child: SearchWidget(
-            controller: controller,
-            movieSearchResults: movieSearchResults,
-            tvShowSearchResults: tvShowSearchResults,
+          SliverToBoxAdapter(
+            child: SearchWidget(
+              controller: controller,
+              movieSearchResults: movieSearchResults,
+              tvShowSearchResults: tvShowSearchResults,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
-  @override
   bool get wantKeepAlive => true;
 }

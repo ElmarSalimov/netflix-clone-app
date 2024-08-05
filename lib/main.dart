@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:netflix_clone/pages/home_page.dart';
-import 'package:netflix_clone/pages/profile_page.dart';
+import 'package:netflix_clone/pages/new_and_hot_page.dart';
 import 'package:netflix_clone/pages/search_page.dart';
 import 'package:netflix_clone/provider/movie_provider.dart';
 import 'package:netflix_clone/provider/page_provider.dart';
@@ -12,6 +12,7 @@ import 'package:netflix_clone/screens/splash_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
@@ -33,7 +34,7 @@ final GoRouter _router = GoRouter(
     ShellRoute(
       navigatorKey: GlobalKey<NavigatorState>(),
       builder: (context, state, child) {
-        return HomeScreen(child: child);
+        return const HomeScreen();
       },
       routes: [
         GoRoute(
@@ -46,7 +47,7 @@ final GoRouter _router = GoRouter(
         ),
         GoRoute(
           path: '/profilePage',
-          builder: (context, state) => const ProfilePage(),
+          builder: (context, state) => const NewAndHotPage(),
         ),
       ],
     ),

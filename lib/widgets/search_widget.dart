@@ -4,15 +4,16 @@ import 'package:netflix_clone/models/movie.dart';
 import 'package:netflix_clone/models/search_model.dart';
 import 'package:netflix_clone/provider/movie_provider.dart';
 import 'package:netflix_clone/util/constants.dart';
-import 'package:netflix_clone/widgets/movie_detail.dart';
+import 'package:netflix_clone/widgets/movie_detail_widget.dart';
+import 'package:netflix_clone/widgets/tv_detail_widget.dart';
 import 'package:provider/provider.dart';
 
 class SearchWidget extends StatefulWidget {
   final TextEditingController controller;
   final Future<SearchModel>? movieSearchResults;
   final Future<SearchModel>? tvShowSearchResults;
-  ScrollController scrollController = ScrollController();
-  ScrollController scrollController2 = ScrollController();
+  final ScrollController scrollController = ScrollController();
+  final ScrollController scrollController2 = ScrollController();
 
   SearchWidget({
     super.key,
@@ -29,84 +30,78 @@ class _SearchWidgetState extends State<SearchWidget> {
   @override
   Widget build(BuildContext context) {
     final List<Movie> movies =
-        Provider.of<MovieProvider>(context, listen: false).popularMovies;
+        Provider.of<MovieProvider>(context, listen: false).topSearches;
     return widget.controller.text.isEmpty
-        ? SizedBox(
-            height: 566,
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 8),
-                      child: Text("Top Searches",
-                          style: GoogleFonts.openSans(
-                              textStyle: const TextStyle(
-                                  fontSize: 18, color: Colors.white))),
-                    ),
-                  ],
-                ),
-                Expanded(
-                  child: ListView.builder(
-                    controller: widget.scrollController2,
-                    scrollDirection: Axis.vertical,
-                    itemCount: movies.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      final result = movies[index];
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) =>
-                                  MovieDetailScreen(movieId: result.id!)));
-                        },
-                        child: SizedBox(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 4, horizontal: 4),
-                            child: Row(
-                              children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(4),
-                                  child: Image.network(
-                                    '$imageUrl${result.posterPath}',
-                                    width: 70,
-                                    height: 105,
-                                    fit: BoxFit.cover,
-                                    errorBuilder:
-                                        (context, error, stackTrace) =>
-                                            Container(
-                                      width: 70,
-                                      height: 105,
-                                      color: Colors.black,
-                                      child: const Center(
-                                        child: Icon(
-                                          Icons.image,
-                                          color: Colors.white,
-                                        ),
-                                      ),
+        ? Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    child: Text("Top Searches",
+                        style: GoogleFonts.openSans(
+                            textStyle: const TextStyle(
+                                fontSize: 18, color: Colors.white))),
+                  ),
+                ],
+              ),
+              ListView.builder(
+                controller: widget.scrollController2,
+                shrinkWrap: true,
+                scrollDirection: Axis.vertical,
+                itemCount: movies.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final result = movies[index];
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) =>
+                              MovieDetailWidget(movieId: result.id!)));
+                    },
+                    child: SizedBox(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 4, horizontal: 4),
+                        child: Row(
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(4),
+                              child: Image.network(
+                                '$imageUrl${result.posterPath}',
+                                width: 70,
+                                height: 105,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) =>
+                                    Container(
+                                  width: 70,
+                                  height: 105,
+                                  color: Colors.black,
+                                  child: const Center(
+                                    child: Icon(
+                                      Icons.image,
+                                      color: Colors.white,
                                     ),
                                   ),
                                 ),
-                                const SizedBox(width: 12),
-                                Expanded(
-                                  child: Text(result.title!,
-                                      style: GoogleFonts.lato(
-                                          textStyle: const TextStyle(
-                                              fontSize: 15,
-                                              color: Colors.white))),
-                                ),
-                              ],
+                              ),
                             ),
-                          ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Text(result.title!,
+                                  style: GoogleFonts.lato(
+                                      textStyle: const TextStyle(
+                                          fontSize: 15, color: Colors.white))),
+                            ),
+                          ],
                         ),
-                      );
-                    },
-                  ),
-                ),
-              ],
-            ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ],
           )
         : SingleChildScrollView(
             controller: widget.scrollController,
@@ -166,22 +161,30 @@ class _SearchWidgetState extends State<SearchWidget> {
                                 : moviesWithPoster.length,
                             itemBuilder: (context, index) {
                               final movie = moviesWithPoster[index];
-                              return Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Image.network(
-                                  '$imageUrl${movie.posterPath}',
-                                  fit: BoxFit.cover,
-                                  width: double.infinity,
-                                  height: 150,
-                                  errorBuilder: (context, error, stackTrace) =>
-                                      Container(
+                              return GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => MovieDetailWidget(
+                                          movieId: movie.id!)));
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Image.network(
+                                    '$imageUrl${movie.posterPath}',
+                                    fit: BoxFit.cover,
                                     width: double.infinity,
                                     height: 150,
-                                    color: Colors.black,
-                                    child: const Center(
-                                      child: Icon(
-                                        Icons.image,
-                                        color: Colors.white,
+                                    errorBuilder:
+                                        (context, error, stackTrace) =>
+                                            Container(
+                                      width: double.infinity,
+                                      height: 150,
+                                      color: Colors.black,
+                                      child: const Center(
+                                        child: Icon(
+                                          Icons.image,
+                                          color: Colors.white,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -247,22 +250,30 @@ class _SearchWidgetState extends State<SearchWidget> {
                                 : tvShowsWithPoster.length,
                             itemBuilder: (context, index) {
                               final tvShow = tvShowsWithPoster[index];
-                              return Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Image.network(
-                                  '$imageUrl${tvShow.posterPath}',
-                                  fit: BoxFit.cover,
-                                  width: double.infinity,
-                                  height: 150,
-                                  errorBuilder: (context, error, stackTrace) =>
-                                      Container(
+                              return GestureDetector(
+                                onTap: () => Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            TvShowDetailWidget(
+                                                tvShowId: tvShow.id!))),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Image.network(
+                                    '$imageUrl${tvShow.posterPath}',
+                                    fit: BoxFit.cover,
                                     width: double.infinity,
                                     height: 150,
-                                    color: Colors.black,
-                                    child: const Center(
-                                      child: Icon(
-                                        Icons.image,
-                                        color: Colors.white,
+                                    errorBuilder:
+                                        (context, error, stackTrace) =>
+                                            Container(
+                                      width: double.infinity,
+                                      height: 150,
+                                      color: Colors.black,
+                                      child: const Center(
+                                        child: Icon(
+                                          Icons.image,
+                                          color: Colors.white,
+                                        ),
                                       ),
                                     ),
                                   ),
