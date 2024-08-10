@@ -6,13 +6,19 @@ import 'package:netflix_clone/pages/search_page.dart';
 import 'package:netflix_clone/provider/movie_provider.dart';
 import 'package:netflix_clone/provider/page_provider.dart';
 import 'package:netflix_clone/screens/home_screen.dart';
-import 'package:netflix_clone/screens/login_screen.dart';
+import 'package:netflix_clone/screens/main_screen.dart';
 import 'package:netflix_clone/screens/onboarding_screen.dart';
 import 'package:netflix_clone/screens/splash_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(const MyApp());
 }
 
@@ -28,13 +34,13 @@ final GoRouter _router = GoRouter(
       builder: (context, state) => OnboardingScreen(),
     ),
     GoRoute(
-      path: '/loginScreen',
-      builder: (context, state) => const LoginScreen(),
+      path: '/mainScreen',
+      builder: (context, state) => const MainScreen(),
     ),
     ShellRoute(
       navigatorKey: GlobalKey<NavigatorState>(),
       builder: (context, state, child) {
-        return const HomeScreen();
+        return HomeScreen();
       },
       routes: [
         GoRoute(

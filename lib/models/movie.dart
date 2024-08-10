@@ -51,20 +51,20 @@ class Movie {
   int? voteCount;
 
   Movie(
-      {adult,
-      backdropPath,
-      genreIds,
-      id,
-      originalLanguage,
-      originalTitle,
-      overview,
-      popularity,
-      posterPath,
-      releaseDate,
-      title,
-      video,
-      voteAverage,
-      voteCount});
+      {required this.adult,
+      required this.backdropPath,
+      required this.genreIds,
+      required this.id,
+      required this.originalLanguage,
+      required this.originalTitle,
+      required this.overview,
+      required this.popularity,
+      required this.posterPath,
+      required this.releaseDate,
+      required this.title,
+      required this.video,
+      required this.voteAverage,
+      required this.voteCount});
 
   Movie.fromJson(Map<String, dynamic> json) {
     adult = json['adult'];
@@ -101,4 +101,15 @@ class Movie {
     data['vote_count'] = voteCount;
     return data;
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Movie && title == other.title;
+
+  @override
+  int get hashCode => id.hashCode;
+
+  @override
+  String toString() => 'Movie(id: $id, title: $title)';
 }

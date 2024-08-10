@@ -1,3 +1,7 @@
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:netflix_clone/models/movie.dart';
@@ -6,6 +10,7 @@ import 'package:netflix_clone/services/api.dart';
 
 class MovieProvider extends ChangeNotifier {
   ApiService apiServices = ApiService();
+  final FirebaseAuth auth = FirebaseAuth.instance;
 
   // Lists
   List<Movie> popularMovies = [];
@@ -17,6 +22,8 @@ class MovieProvider extends ChangeNotifier {
   List<TvShow> airingTvShows = [];
   List<TvShow> dramaTvShows = [];
   List<TvShow> animationTvShows = [];
+
+  List<Movie> myList = [];
 
   // Controllers
   ScrollController popularController = ScrollController();
@@ -44,6 +51,88 @@ class MovieProvider extends ChangeNotifier {
     airingTvController.addListener(_airingTvListener);
     dramaTvController.addListener(_dramaTvListener);
     animationTvController.addListener(_animationTvListener);
+  }
+
+  void addToMyList(Movie movie) {
+    if (!myList.contains(movie)) {
+      myList.add(movie);
+      notifyListeners();
+    }
+
+    uploadUserData();
+  }
+
+  void removeFromMyList(Movie movie) {
+    myList.remove(movie);
+    notifyListeners();
+
+    uploadUserData();
+  }
+
+  // Method to upload user's movie list to Firestore
+  Future<void> uploadUserData() async {
+    final User? user = auth.currentUser;
+    final uid = user!.uid;
+    final email = user.email;
+
+    if (email == null) {
+      log('No user logged in');
+      return;
+    }
+
+    try {
+      DocumentReference userDoc =
+          FirebaseFirestore.instance.collection('users').doc(uid);
+
+      // Create or update user document
+      await userDoc.set({
+        'email': email,
+        'movies': myList.map((movie) => movie.toJson()).toList(),
+      }, SetOptions(merge: true));
+
+      log('User data uploaded successfully');
+    } catch (e) {
+      log('Failed to upload user data: $e');
+    }
+  }
+
+  // Method to retrieve user's movie list from Firestore
+  Future<void> fetchUserData() async {
+    final User? user = auth.currentUser;
+    final uid = user!.uid;
+    final email = user.email;
+
+    // print(email);
+
+    if (email == null) {
+      log('No user logged in');
+      return;
+    }
+
+    try {
+      DocumentReference userDoc =
+          FirebaseFirestore.instance.collection('users').doc(uid);
+      DocumentSnapshot userSnapshot = await userDoc.get();
+
+      if (userSnapshot.exists) {
+        Map<String, dynamic> userData =
+            userSnapshot.data() as Map<String, dynamic>;
+        List<dynamic> moviesData = userData['movies'] as List<dynamic>;
+
+        myList = moviesData
+            .map((movieData) =>
+                Movie.fromJson(movieData as Map<String, dynamic>))
+            .toList();
+
+        log('User data retrieved successfully for email: $email');
+      } else {
+        log('No user data found for email: $email');
+      }
+
+      notifyListeners();
+    } catch (e) {
+      log('Failed to fetch user data: $e');
+    }
   }
 
   Future<void> fetchTopSearches() async {

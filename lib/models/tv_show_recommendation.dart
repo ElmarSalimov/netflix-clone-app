@@ -1,3 +1,5 @@
+import 'package:netflix_clone/models/tv_show.dart';
+
 class TvShowRecommendation {
   int? page;
   List<Results>? results;
@@ -101,5 +103,23 @@ class Results {
     data['vote_count'] = voteCount;
     data['origin_country'] = originCountry;
     return data;
+  }
+
+  TvShow toTvShow() {
+    return TvShow(
+        adult: adult,
+        backdropPath: backdropPath,
+        genreIds: genreIds,
+        id: id,
+        originCountry: originCountry,
+        originalLanguage: originalLanguage,
+        originalName: originalName,
+        overview: overview,
+        popularity: popularity,
+        posterPath: posterPath,
+        firstAirDate: firstAirDate,
+        name: name,
+        voteAverage: voteAverage,
+        voteCount: voteCount);
   }
 }

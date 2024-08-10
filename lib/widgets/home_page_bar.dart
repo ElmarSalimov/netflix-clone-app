@@ -70,10 +70,9 @@ class HomePageBar extends SliverPersistentHeaderDelegate {
                         color: Colors.white,
                       ),
                       IconButton(
-                        icon: const Icon(LucideIcons.search),
+                        icon: const Icon(LucideIcons.user),
                         onPressed: () {
-                          context.go('/searchPage');
-                          pageProvider.setIndex(1);
+                          Scaffold.of(context).openDrawer();
                         },
                         color: Colors.white,
                       ),

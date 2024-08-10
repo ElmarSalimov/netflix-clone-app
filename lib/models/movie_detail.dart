@@ -1,3 +1,4 @@
+
 class MovieDetail {
   bool? adult;
   String? backdropPath;

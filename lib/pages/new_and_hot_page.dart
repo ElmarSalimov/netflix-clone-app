@@ -30,12 +30,12 @@ class _NewAndHotPageState extends State<NewAndHotPage> {
   }
 
   void _scrollListener() {
-    if (controller.offset < 3000) {
+    if (controller.offset < 10800) {
       setState(() {
         isFirst = true;
         isSecond = false;
       });
-    } else if (controller.offset > 3000) {
+    } else if (controller.offset > 10800) {
       setState(() {
         isFirst = false;
         isSecond = true;
@@ -50,7 +50,7 @@ class _NewAndHotPageState extends State<NewAndHotPage> {
     });
     controller.removeListener(_scrollListener);
     await controller.animateTo(
-      isSecond ? 3000 : 0,
+      isSecond ? 10800 : 0,
       duration: const Duration(milliseconds: 300), // Duration of the animation
       curve: Curves.easeInOut, // Curve of the animation
     );

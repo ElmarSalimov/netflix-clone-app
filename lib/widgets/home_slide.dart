@@ -1,6 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:netflix_clone/util/constants.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:netflix_clone/util/constants.dart';
+import 'package:netflix_clone/widgets/movie_detail_widget.dart';
+import 'package:netflix_clone/widgets/tv_detail_widget.dart';
 import 'package:shimmer/shimmer.dart';
 
 class HomeSlide extends StatelessWidget {
@@ -44,25 +47,40 @@ class HomeSlide extends StatelessWidget {
               itemBuilder: (BuildContext context, int index) {
                 final result = list[index];
                 return Container(
+                  width: 130, // Set a fixed width to maintain consistent layout
                   margin:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  child: Image.network(
-                    '$imageUrl${result.posterPath}',
-                    fit: BoxFit.cover,
-                    loadingBuilder: (BuildContext ctx, Widget child,
-                        ImageChunkEvent? loadingProgress) {
-                      if (loadingProgress == null) {
-                        return child; // The image has finished loading
+                  child: GestureDetector(
+                    onTap: () {
+                      if (type == "Movie") {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => MovieDetailWidget(
+                                  movieId: result.id,
+                                  movie: result,
+                                )));
                       } else {
-                        return Shimmer.fromColors(
-                          baseColor: Colors.grey[300]!,
-                          highlightColor: Colors.grey[100]!,
-                          child: Container(
-                            color: Colors.grey[300],
-                          ),
-                        );
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) =>
+                                TvShowDetailWidget(tvShowId: result.id)));
                       }
                     },
+                    child: CachedNetworkImage(
+                      imageUrl: '$imageUrl${result.posterPath}',
+                      placeholder: (context, url) => Shimmer.fromColors(
+                        baseColor: Colors.grey[700]!,
+                        highlightColor: Colors.grey[500]!,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(4),
+                            color: Colors.grey[800],
+                          ),
+                          width: 120,
+                          height: 200,
+                        ),
+                      ),
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.error, color: Colors.red),
+                    ),
                   ),
                 );
               },

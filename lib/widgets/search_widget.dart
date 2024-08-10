@@ -7,6 +7,7 @@ import 'package:netflix_clone/util/constants.dart';
 import 'package:netflix_clone/widgets/movie_detail_widget.dart';
 import 'package:netflix_clone/widgets/tv_detail_widget.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 
 class SearchWidget extends StatefulWidget {
   final TextEditingController controller;
@@ -57,8 +58,10 @@ class _SearchWidgetState extends State<SearchWidget> {
                   return GestureDetector(
                     onTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) =>
-                              MovieDetailWidget(movieId: result.id!)));
+                          builder: (context) => MovieDetailWidget(
+                                movieId: result.id!,
+                                movie: movies[index],
+                              )));
                     },
                     child: SizedBox(
                       child: Padding(
@@ -112,9 +115,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                   future: widget.movieSearchResults,
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
+                      return _buildShimmerPlaceholder();
                     } else if (snapshot.hasError) {
                       return Center(
                         child: Text(
@@ -131,7 +132,6 @@ class _SearchWidgetState extends State<SearchWidget> {
                         ),
                       );
                     } else {
-                      // Filter out movies with null or empty posterPath
                       final moviesWithPoster = snapshot.data!.results!
                           .where((movie) => movie.posterPath != null)
                           .toList();
@@ -161,29 +161,38 @@ class _SearchWidgetState extends State<SearchWidget> {
                                 : moviesWithPoster.length,
                             itemBuilder: (context, index) {
                               final movie = moviesWithPoster[index];
+
                               return GestureDetector(
                                 onTap: () {
-                                  Navigator.of(context).push(MaterialPageRoute(
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
                                       builder: (context) => MovieDetailWidget(
-                                          movieId: movie.id!)));
+                                        movieId: movie.id!,
+                                        movie: movie.toMovie(),
+                                      ),
+                                    ),
+                                  );
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Image.network(
-                                    '$imageUrl${movie.posterPath}',
-                                    fit: BoxFit.cover,
-                                    width: double.infinity,
-                                    height: 150,
-                                    errorBuilder:
-                                        (context, error, stackTrace) =>
-                                            Container(
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(6),
+                                    child: Image.network(
+                                      '$imageUrl${movie.posterPath}',
+                                      fit: BoxFit.cover,
                                       width: double.infinity,
                                       height: 150,
-                                      color: Colors.black,
-                                      child: const Center(
-                                        child: Icon(
-                                          Icons.image,
-                                          color: Colors.white,
+                                      errorBuilder:
+                                          (context, error, stackTrace) =>
+                                              Container(
+                                        width: double.infinity,
+                                        height: 150,
+                                        color: Colors.black,
+                                        child: const Center(
+                                          child: Icon(
+                                            Icons.image,
+                                            color: Colors.white,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -201,9 +210,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                   future: widget.tvShowSearchResults,
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
+                      return _buildShimmerPlaceholder();
                     } else if (snapshot.hasError) {
                       return Center(
                         child: Text(
@@ -220,7 +227,6 @@ class _SearchWidgetState extends State<SearchWidget> {
                         ),
                       );
                     } else {
-                      // Filter out TV shows with null or empty posterPath
                       final tvShowsWithPoster = snapshot.data!.results!
                           .where((tvShow) => tvShow.posterPath != null)
                           .toList();
@@ -255,24 +261,28 @@ class _SearchWidgetState extends State<SearchWidget> {
                                     MaterialPageRoute(
                                         builder: (context) =>
                                             TvShowDetailWidget(
-                                                tvShowId: tvShow.id!))),
+                                              tvShowId: tvShow.id!,
+                                            ))),
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Image.network(
-                                    '$imageUrl${tvShow.posterPath}',
-                                    fit: BoxFit.cover,
-                                    width: double.infinity,
-                                    height: 150,
-                                    errorBuilder:
-                                        (context, error, stackTrace) =>
-                                            Container(
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(6),
+                                    child: Image.network(
+                                      '$imageUrl${tvShow.posterPath}',
+                                      fit: BoxFit.cover,
                                       width: double.infinity,
                                       height: 150,
-                                      color: Colors.black,
-                                      child: const Center(
-                                        child: Icon(
-                                          Icons.image,
-                                          color: Colors.white,
+                                      errorBuilder:
+                                          (context, error, stackTrace) =>
+                                              Container(
+                                        width: double.infinity,
+                                        height: 150,
+                                        color: Colors.black,
+                                        child: const Center(
+                                          child: Icon(
+                                            Icons.image,
+                                            color: Colors.white,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -289,5 +299,37 @@ class _SearchWidgetState extends State<SearchWidget> {
               ],
             ),
           );
+  }
+
+  Widget _buildShimmerPlaceholder() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Shimmer.fromColors(
+        baseColor: Colors.grey[800]!,
+        highlightColor: Colors.grey[600]!,
+        child: GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
+            childAspectRatio: 0.7,
+          ),
+          itemCount: 9,
+          itemBuilder: (context, index) {
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(6),
+                  color: Colors.grey[800],
+                ),
+                width: double.infinity,
+                height: 150,
+              ),
+            );
+          },
+        ),
+      ),
+    );
   }
 }
