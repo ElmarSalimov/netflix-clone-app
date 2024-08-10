@@ -1,8 +1,11 @@
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:netflix_clone/pages/home_page.dart';
 import 'package:netflix_clone/pages/new_and_hot_page.dart';
 import 'package:netflix_clone/pages/search_page.dart';
+import 'package:netflix_clone/provider/movie_provider.dart';
 import 'package:netflix_clone/provider/page_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -15,8 +18,10 @@ class HomeScreen extends StatelessWidget {
     NewAndHotPage(),
   ];
 
+
   @override
   Widget build(BuildContext context) {
+    final movieProvider = Provider.of<MovieProvider>(context, listen: false);
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
@@ -29,6 +34,10 @@ class HomeScreen extends StatelessWidget {
           },
         ),
       ),
+      floatingActionButton: FloatingActionButton(onPressed: () async {
+        await FirebaseAuth.instance.signOut();
+        movieProvider.myList.clear();
+      }),
       bottomNavigationBar: Consumer<PageProvider>(
         builder: (context, pageProvider, child) {
           return BottomNavigationBar(

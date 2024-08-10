@@ -1,34 +1,61 @@
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:netflix_clone/provider/movie_provider.dart';
 import 'package:provider/provider.dart';
 
-class LoginScreen extends StatefulWidget {
-  final VoidCallback showRegisterScreen;
-  const LoginScreen({super.key, required this.showRegisterScreen});
+class RegisterScreen extends StatefulWidget {
+  final VoidCallback? showLoginScreen;
+  const RegisterScreen({super.key, this.showLoginScreen});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmController = TextEditingController();
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _confirmController.dispose();
     super.dispose();
   }
 
-  Future signIn() async {
-    final movieProvider = Provider.of<MovieProvider>(context, listen: false);
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: _emailController.text, password: _passwordController.text);
-    
-    movieProvider.fetchUserData();
+Future<void> signUp() async {
+  final movieProvider = Provider.of<MovieProvider>(context, listen: false);
+  
+  if (_passwordController.text == _confirmController.text) {
+    UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      email: _emailController.text,
+      password: _passwordController.text,
+    );
+
+    String uid = userCredential.user!.uid;
+    await FirebaseFirestore.instance.collection('users').doc(uid).set({
+      'email': _emailController.text,
+    });
+
+    log('User signed up and document created successfully');
+  } else {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return const AlertDialog(
+          content: Text("Passwords do not match"),
+        );
+      },
+    );
   }
+
+  movieProvider.fetchUserData();
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +94,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 fillColor: Color.fromRGBO(64, 61, 61, 1),
                 border: OutlineInputBorder(borderSide: BorderSide()),
                 labelText: 'Email',
-                //solve hinttext problem
                 floatingLabelBehavior: FloatingLabelBehavior.never,
                 labelStyle: TextStyle(color: Colors.white54),
               ),
@@ -95,11 +121,32 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
 
-          // Sign In
+          // Confirm Password
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 8),
+            child: TextField(
+              style: const TextStyle(color: Colors.white),
+              controller: _confirmController,
+              cursorColor: Colors.white,
+              obscureText: true,
+              decoration: const InputDecoration(
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white54)),
+                filled: true,
+                fillColor: Color.fromRGBO(64, 61, 61, 1),
+                border: OutlineInputBorder(borderSide: BorderSide()),
+                labelText: 'Confirm Password',
+                floatingLabelBehavior: FloatingLabelBehavior.never,
+                labelStyle: TextStyle(color: Colors.white54),
+              ),
+            ),
+          ),
+
+          // Sign Up
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8),
             child: GestureDetector(
-              onTap: signIn,
+              onTap: signUp,
               child: Container(
                 height: 40,
                 margin: const EdgeInsets.symmetric(horizontal: 48),
@@ -107,7 +154,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     color: const Color.fromARGB(255, 255, 17, 0),
                     borderRadius: BorderRadius.circular(4)),
                 child: const Center(
-                  child: Text("Sign In",
+                  child: Text("Sign Up",
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 20,
@@ -146,11 +193,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
           // Toggle Pages
           GestureDetector(
-            onTap: widget.showRegisterScreen,
+            onTap: widget.showLoginScreen,
             child: const Padding(
               padding: EdgeInsets.symmetric(vertical: 24),
               child: Text(
-                'Not a member? Register now',
+                'Already a member? Login now',
                 style: TextStyle(
                     color: Colors.white54,
                     fontSize: 18,

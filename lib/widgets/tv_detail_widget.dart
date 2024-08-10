@@ -42,8 +42,10 @@ class TvShowDetailWidgetState extends State<TvShowDetailWidget> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               final tvShow = snapshot.data;
-              String genresText =
-                  tvShow!.genres!.map((genre) => genre.name).join(', ');
+              List<String?> genresText =
+                  tvShow!.genres != null && tvShow.genres!.isNotEmpty
+                      ? tvShow.genres!.map((genre) => genre.name).toList()
+                      : [];
 
               return Column(
                 children: [
@@ -103,13 +105,17 @@ class TvShowDetailWidgetState extends State<TvShowDetailWidget> {
                             const SizedBox(
                               width: 30,
                             ),
-                            Text(
-                              genresText,
-                              style: GoogleFonts.lato(
-                                color: Colors.grey,
-                                fontSize: 17,
+                            if (genresText
+                                .isNotEmpty) // Conditionally display genres
+                              Text(
+                                genresText.length > 1
+                                    ? "${genresText[0]}, ${genresText[1]}"
+                                    : "${genresText[0]}",
+                                style: GoogleFonts.lato(
+                                  color: Colors.grey,
+                                  fontSize: 17,
+                                ),
                               ),
-                            ),
                           ],
                         ),
                         const SizedBox(

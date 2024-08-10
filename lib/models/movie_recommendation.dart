@@ -1,3 +1,5 @@
+import 'package:netflix_clone/models/movie.dart';
+
 class MovieRecommendation {
   int? page;
   List<Results>? results;
@@ -101,5 +103,24 @@ class Results {
     data['vote_average'] = voteAverage;
     data['vote_count'] = voteCount;
     return data;
+  }
+
+  Movie toMovie() {
+    return Movie(
+      adult: adult,
+      backdropPath: backdropPath,
+      genreIds: genreIds,
+      id: id,
+      originalLanguage: originalLanguage,
+      originalTitle: originalTitle,
+      overview: overview,
+      popularity: popularity,
+      posterPath: posterPath,
+      releaseDate: releaseDate,
+      title: title,
+      video: video,
+      voteAverage: voteAverage,
+      voteCount: voteCount,
+    );
   }
 }

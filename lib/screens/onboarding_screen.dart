@@ -94,7 +94,7 @@ class OnboardingScreen extends StatelessWidget {
             alignment: Alignment.bottomCenter,
             child: GestureDetector(
               onTap: () {
-                context.go('/loginScreen');
+                context.go('/mainScreen');
               },
               child: Container(
                 margin: const EdgeInsets.only(bottom: 20),
