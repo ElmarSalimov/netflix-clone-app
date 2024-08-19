@@ -16,7 +16,6 @@ A Netflix clone application built using Flutter, replicating the core features o
 - **[Flutter](https://flutter.dev/)**: The UI toolkit used for building the application.
 - **[Provider](https://pub.dev/packages/provider)**: State management solution for managing the app's state.
 - **[http](https://pub.dev/packages/http)**: Simplified HTTP requests.
-- **Models**: Data models to structure and manage API data.
 - **[Firebase Firestore](https://firebase.google.com/products/firestore)**: A NoSQL cloud database to store user data and watchlists.
 - **[FirebaseAuth](https://firebase.google.com/products/auth)**: For handling user authentication.
 - **[GoRouter](https://pub.dev/packages/go_router)**: For declarative navigation and routing within the app.
