@@ -8,7 +8,6 @@ A Netflix clone application built using Flutter, replicating the core features o
 - **Movie and TV Show Browsing**: Browse movies and TV shows using data fetched from external APIs.
 - **Search Functionality**: Search for movies and TV shows with separate results for each.
 - **Movie/TV Show Details**: View detailed information about each movie or TV show, including trailers.
-- **User Profile Management**: Manage user profiles and watchlists using Firebase Firestore.
 - **Offline Caching**: Cached network images to reduce data usage and improve performance.
 - **Smooth Animations**: Enhance user experience with Lottie animations and shimmer effects.
 
@@ -17,7 +16,6 @@ A Netflix clone application built using Flutter, replicating the core features o
 - **[Flutter](https://flutter.dev/)**: The UI toolkit used for building the application.
 - **[Provider](https://pub.dev/packages/provider)**: State management solution for managing the app's state.
 - **API Fetching**: 
-  - **[dio](https://pub.dev/packages/dio)**: Powerful HTTP client for Dart.
   - **[http](https://pub.dev/packages/http)**: Simplified HTTP requests.
 - **Models**: Data models to structure and manage API data.
 - **[Firebase Firestore](https://firebase.google.com/products/firestore)**: A NoSQL cloud database to store user data and watchlists.
@@ -27,7 +25,6 @@ A Netflix clone application built using Flutter, replicating the core features o
 - **[Lottie](https://pub.dev/packages/lottie)**: For smooth and customizable animations.
 - **[Cached Network Images](https://pub.dev/packages/cached_network_image)**: For efficient image loading and caching.
 - **[YouTube Player Flutter](https://pub.dev/packages/youtube_player_flutter)**: For playing YouTube videos within the app.
-- **[Video Player](https://pub.dev/packages/video_player)**: For playing video content.
 - **[Google Fonts](https://pub.dev/packages/google_fonts)**: Custom fonts from Google Fonts.
 - **[Smooth Page Indicator](https://pub.dev/packages/smooth_page_indicator)**: For creating smooth and customizable page indicators.
 - **[Cupertino Icons](https://pub.dev/packages/cupertino_icons)**: iOS-style icons.
