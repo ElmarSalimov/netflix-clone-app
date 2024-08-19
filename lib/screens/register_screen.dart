@@ -62,6 +62,7 @@ Future<void> signUp() async {
 
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.sizeOf(context).height;
     return Scaffold(
       extendBodyBehindAppBar: true,
       resizeToAvoidBottomInset: false,
@@ -80,8 +81,8 @@ Future<void> signUp() async {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const SizedBox(
-              height: 140,
+            SizedBox(
+              height: height * 0.25,
             ),
         
             // Email

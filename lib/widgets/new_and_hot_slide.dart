@@ -26,6 +26,8 @@ class _NewAndHotSlideState extends State<NewAndHotSlide> {
   @override
   Widget build(BuildContext context) {
     final movieProvider = Provider.of<MovieProvider>(context, listen: true);
+    final width = MediaQuery.sizeOf(context).width;
+    
     return ListView.builder(
       controller: controller,
       shrinkWrap: true,
@@ -131,7 +133,7 @@ class _NewAndHotSlideState extends State<NewAndHotSlide> {
                         child: SafeArea(
                           child: SizedBox(
                             height: 150,
-                            width: 260,
+                            width: width * 0.8,
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(8),
                               child: CachedNetworkImage(
@@ -161,7 +163,7 @@ class _NewAndHotSlideState extends State<NewAndHotSlide> {
                         Padding(
                           padding: const EdgeInsets.only(top: 6),
                           child: SizedBox(
-                            width: 260,
+                            width: width * 0.8,
                             child: Text(
                               movie.title!,
                               maxLines: 2,
@@ -179,7 +181,7 @@ class _NewAndHotSlideState extends State<NewAndHotSlide> {
                           Padding(
                             padding: const EdgeInsets.only(top: 6),
                             child: SizedBox(
-                              width: 260,
+                              width: width * 0.8,
                               child: Row(
                                 children: [
                                   Text(
@@ -200,7 +202,7 @@ class _NewAndHotSlideState extends State<NewAndHotSlide> {
                         Padding(
                           padding: const EdgeInsets.only(top: 6),
                           child: SizedBox(
-                            width: 260, 
+                            width: width * 0.8, 
                             child: Text(
                               movie.overview!,
                               maxLines: 3,
