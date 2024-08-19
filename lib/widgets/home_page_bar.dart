@@ -1,15 +1,14 @@
 import 'dart:ui';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lucide_icons/lucide_icons.dart';
-import 'package:netflix_clone/provider/page_provider.dart';
-import 'package:provider/provider.dart';
 
 class HomePageBar extends SliverPersistentHeaderDelegate {
   @override
   final double minExtent;
-
   @override
   final double maxExtent;
 
@@ -25,10 +24,12 @@ class HomePageBar extends SliverPersistentHeaderDelegate {
     required this.onFilterChanged,
   });
 
+  final userCollection = FirebaseFirestore.instance.collection('users');
+  final currentUser = FirebaseAuth.instance.currentUser!;
+
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
-    final pageProvider = Provider.of<PageProvider>(context, listen: false);
     return Stack(
       fit: StackFit.expand,
       children: <Widget>[
@@ -56,12 +57,29 @@ class HomePageBar extends SliverPersistentHeaderDelegate {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("For You",
-                      style: GoogleFonts.openSans(
-                          textStyle: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 22,
-                      ))),
+                  StreamBuilder<DocumentSnapshot>(
+                      stream: userCollection.doc(currentUser.uid).snapshots(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          final userData =
+                              snapshot.data!.data() as Map<String, dynamic>;
+                          return Text(
+                              userData['name'].length > 0
+                                  ? "For ${userData['name']}"
+                                  : "For You",
+                              style: GoogleFonts.openSans(
+                                  textStyle: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 22,
+                              )));
+                        }
+                        return Text("For You",
+                            style: GoogleFonts.openSans(
+                                textStyle: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 22,
+                            )));
+                      }),
                   Row(
                     children: [
                       IconButton(
@@ -72,7 +90,7 @@ class HomePageBar extends SliverPersistentHeaderDelegate {
                       IconButton(
                         icon: const Icon(LucideIcons.user),
                         onPressed: () {
-                          Scaffold.of(context).openDrawer();
+                          context.go('/profileScreen');
                         },
                         color: Colors.white,
                       ),

@@ -8,6 +8,7 @@ import 'package:netflix_clone/widgets/movie_detail_widget.dart';
 import 'package:netflix_clone/widgets/tv_detail_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class SearchWidget extends StatefulWidget {
   final TextEditingController controller;
@@ -71,13 +72,15 @@ class _SearchWidgetState extends State<SearchWidget> {
                           children: [
                             ClipRRect(
                               borderRadius: BorderRadius.circular(4),
-                              child: Image.network(
-                                '$imageUrl${result.posterPath}',
+                              child: CachedNetworkImage(
+                                imageUrl: '$imageUrl${result.posterPath}',
                                 width: 70,
                                 height: 105,
                                 fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) =>
-                                    Container(
+                                placeholder: (context, url) =>
+                                    _buildShimmerPlaceholder(
+                                        width: 70, height: 105),
+                                errorWidget: (context, url, error) => Container(
                                   width: 70,
                                   height: 105,
                                   color: Colors.black,
@@ -177,14 +180,15 @@ class _SearchWidgetState extends State<SearchWidget> {
                                   padding: const EdgeInsets.all(8.0),
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(6),
-                                    child: Image.network(
-                                      '$imageUrl${movie.posterPath}',
+                                    child: CachedNetworkImage(
+                                      imageUrl: '$imageUrl${movie.posterPath}',
                                       fit: BoxFit.cover,
                                       width: double.infinity,
                                       height: 150,
-                                      errorBuilder:
-                                          (context, error, stackTrace) =>
-                                              Container(
+                                      placeholder: (context, url) =>
+                                          _buildShimmerPlaceholder(),
+                                      errorWidget: (context, url, error) =>
+                                          Container(
                                         width: double.infinity,
                                         height: 150,
                                         color: Colors.black,
@@ -267,14 +271,15 @@ class _SearchWidgetState extends State<SearchWidget> {
                                   padding: const EdgeInsets.all(8.0),
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(6),
-                                    child: Image.network(
-                                      '$imageUrl${tvShow.posterPath}',
+                                    child: CachedNetworkImage(
+                                      imageUrl: '$imageUrl${tvShow.posterPath}',
                                       fit: BoxFit.cover,
                                       width: double.infinity,
                                       height: 150,
-                                      errorBuilder:
-                                          (context, error, stackTrace) =>
-                                              Container(
+                                      placeholder: (context, url) =>
+                                          _buildShimmerPlaceholder(),
+                                      errorWidget: (context, url, error) =>
+                                          Container(
                                         width: double.infinity,
                                         height: 150,
                                         color: Colors.black,
@@ -301,33 +306,17 @@ class _SearchWidgetState extends State<SearchWidget> {
           );
   }
 
-  Widget _buildShimmerPlaceholder() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Shimmer.fromColors(
-        baseColor: Colors.grey[800]!,
-        highlightColor: Colors.grey[600]!,
-        child: GridView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
-            childAspectRatio: 0.7,
-          ),
-          itemCount: 9,
-          itemBuilder: (context, index) {
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(6),
-                  color: Colors.grey[800],
-                ),
-                width: double.infinity,
-                height: 150,
-              ),
-            );
-          },
+  Widget _buildShimmerPlaceholder(
+      {double width = double.infinity, double height = 150}) {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[800]!,
+      highlightColor: Colors.grey[600]!,
+      child: Container(
+        width: width,
+        height: height,
+        decoration: BoxDecoration(
+          color: Colors.grey[800],
+          borderRadius: BorderRadius.circular(6),
         ),
       ),
     );

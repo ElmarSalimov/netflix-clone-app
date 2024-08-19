@@ -5,8 +5,12 @@ class OnboardingTile extends StatelessWidget {
   final String imagePath;
   final String mainText;
   final String secondText;
-  
-  const OnboardingTile({super.key, required this.imagePath, required this.mainText, required this.secondText});
+
+  const OnboardingTile(
+      {super.key,
+      required this.imagePath,
+      required this.mainText,
+      required this.secondText});
 
   @override
   Widget build(BuildContext context) {
@@ -17,10 +21,12 @@ class OnboardingTile extends StatelessWidget {
           children: [
             Image.asset(imagePath),
             Text(mainText,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
-                    fontSize: 34)),
+                    fontSize: 26)),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 50),
               child: Column(
@@ -30,13 +36,14 @@ class OnboardingTile extends StatelessWidget {
                   ),
                   Text(secondText,
                       textAlign: TextAlign.center,
-                      style: const TextStyle(color: Colors.white, fontSize: 20)),
+                      style:
+                          const TextStyle(color: Colors.white, fontSize: 18)),
                   const SizedBox(
                     height: 16,
                   ),
                   const Text("Create a netflix account and more at",
                       textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.white, fontSize: 20)),
+                      style: TextStyle(color: Colors.white, fontSize: 18)),
                   GestureDetector(
                     onTap: () => launchUrl(Uri.parse('https://netflix.com')),
                     child: const Text("netflix.com/more",
