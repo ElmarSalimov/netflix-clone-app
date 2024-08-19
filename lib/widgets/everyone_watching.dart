@@ -22,6 +22,7 @@ class _EveryoneWatchingSlideState extends State<EveryoneWatchingSlide> {
   @override
   Widget build(BuildContext context) {
     final movieProvider = Provider.of<MovieProvider>(context, listen: false);
+    final width = MediaQuery.sizeOf(context).width;
     return ListView.builder(
       controller: controller,
       shrinkWrap: true,
@@ -51,7 +52,7 @@ class _EveryoneWatchingSlideState extends State<EveryoneWatchingSlide> {
                         },
                         child: SizedBox(
                           height: 170,
-                          width: 300,
+                          width: width * 0.8,
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(8),
                             child: CachedNetworkImage(
@@ -80,7 +81,7 @@ class _EveryoneWatchingSlideState extends State<EveryoneWatchingSlide> {
                         Padding(
                           padding: const EdgeInsets.only(top: 6),
                           child: SizedBox(
-                            width: 300,
+                            width: width * 0.8,
                             child: Text(
                               movie.title!,
                               maxLines: 2,
@@ -98,7 +99,7 @@ class _EveryoneWatchingSlideState extends State<EveryoneWatchingSlide> {
                         Padding(
                           padding: const EdgeInsets.only(top: 6),
                           child: SizedBox(
-                            width: 300,
+                            width: width * 0.8,
                             child: Text(
                               movie.overview!,
                               maxLines: 4,
