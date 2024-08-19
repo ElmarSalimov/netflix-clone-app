@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:netflix_clone/pages/home_page.dart';
@@ -5,9 +7,11 @@ import 'package:netflix_clone/pages/new_and_hot_page.dart';
 import 'package:netflix_clone/pages/search_page.dart';
 import 'package:netflix_clone/provider/movie_provider.dart';
 import 'package:netflix_clone/provider/page_provider.dart';
+import 'package:netflix_clone/screens/auth_screen.dart';
 import 'package:netflix_clone/screens/home_screen.dart';
 import 'package:netflix_clone/screens/main_screen.dart';
 import 'package:netflix_clone/screens/onboarding_screen.dart';
+import 'package:netflix_clone/screens/profile_screen.dart';
 import 'package:netflix_clone/screens/splash_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -18,6 +22,9 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await FirebaseAuth.instance.signOut();
+  FirebaseFirestore.instance.settings =
+      const Settings(persistenceEnabled: true);
 
   runApp(const MyApp());
 }
@@ -25,6 +32,10 @@ void main() async {
 final GoRouter _router = GoRouter(
   initialLocation: '/splashScreen',
   routes: [
+    GoRoute(
+      path: '/authScreen',
+      builder: (context, state) => const AuthScreen(),
+    ),
     GoRoute(
       path: '/splashScreen',
       builder: (context, state) => const SplashScreen(),
@@ -37,10 +48,14 @@ final GoRouter _router = GoRouter(
       path: '/mainScreen',
       builder: (context, state) => const MainScreen(),
     ),
+    GoRoute(
+      path: '/profileScreen',
+      builder: (context, state) => const ProfileScreen(),
+    ),
     ShellRoute(
       navigatorKey: GlobalKey<NavigatorState>(),
       builder: (context, state, child) {
-        return HomeScreen();
+        return const HomeScreen();
       },
       routes: [
         GoRoute(

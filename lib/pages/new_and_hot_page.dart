@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:netflix_clone/services/api.dart';
+import 'package:netflix_clone/widgets/everyone_watching.dart';
 import 'package:netflix_clone/widgets/new_and_hot_bar.dart';
-import 'package:netflix_clone/widgets/new_and_hot_widget.dart';
+import 'package:netflix_clone/widgets/new_and_hot_slide.dart';
 
 class NewAndHotPage extends StatefulWidget {
   const NewAndHotPage({super.key});
@@ -30,12 +31,12 @@ class _NewAndHotPageState extends State<NewAndHotPage> {
   }
 
   void _scrollListener() {
-    if (controller.offset < 10800) {
+    if (controller.offset < 4850) {
       setState(() {
         isFirst = true;
         isSecond = false;
       });
-    } else if (controller.offset > 10800) {
+    } else if (controller.offset > 4850) {
       setState(() {
         isFirst = false;
         isSecond = true;
@@ -50,9 +51,9 @@ class _NewAndHotPageState extends State<NewAndHotPage> {
     });
     controller.removeListener(_scrollListener);
     await controller.animateTo(
-      isSecond ? 10800 : 0,
-      duration: const Duration(milliseconds: 300), // Duration of the animation
-      curve: Curves.easeInOut, // Curve of the animation
+      isSecond ? 4850 : 0,
+      duration: const Duration(milliseconds: 300), 
+      curve: Curves.easeInOut,
     );
     controller.addListener(_scrollListener);
   }
@@ -72,7 +73,7 @@ class _NewAndHotPageState extends State<NewAndHotPage> {
               onFilterChanged: _updateFilter),
         ),
         const SliverToBoxAdapter(
-          child: NewAndHotWidget(),
+          child: Column(children: [NewAndHotSlide(), EveryoneWatchingSlide()]),
         ),
       ],
     );

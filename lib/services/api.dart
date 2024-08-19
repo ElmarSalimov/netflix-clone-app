@@ -198,4 +198,26 @@ class ApiService {
     }
     throw Exception("Fail");
   }
+
+  Future<String?> getMovieTrailer(int movieId) async {
+    final response = await http.get(
+      Uri.parse(
+          'https://api.themoviedb.org/3/movie/$movieId/videos?api_key=$apiKey'),
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      final results = data['results'] as List;
+
+      final trailer = results.firstWhere(
+        (video) => video['type'] == 'Trailer' && video['site'] == 'YouTube',
+        orElse: () => null,
+      );
+
+      if (trailer != null) {
+        return trailer['key'];
+      }
+    }
+    return null;
+  }
 }

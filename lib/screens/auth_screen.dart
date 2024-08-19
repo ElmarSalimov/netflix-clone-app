@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:netflix_clone/provider/movie_provider.dart';
 import 'package:netflix_clone/screens/login_screen.dart';
 import 'package:netflix_clone/screens/register_screen.dart';
-import 'package:provider/provider.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});

@@ -24,6 +24,7 @@ class MovieProvider extends ChangeNotifier {
   List<TvShow> animationTvShows = [];
 
   List<Movie> myList = [];
+  List<Movie> watchedList = [];
 
   // Controllers
   ScrollController popularController = ScrollController();
@@ -58,14 +59,26 @@ class MovieProvider extends ChangeNotifier {
       myList.add(movie);
       notifyListeners();
     }
-
     uploadUserData();
   }
 
   void removeFromMyList(Movie movie) {
     myList.remove(movie);
     notifyListeners();
+    uploadUserData();
+  }
 
+  void addToWatchedList(Movie movie) {
+    if (!watchedList.contains(movie)) {
+      watchedList.add(movie);
+      notifyListeners();
+    }
+    uploadUserData();
+  }
+
+  void removeFromWatchedList(Movie movie) {
+    watchedList.remove(movie);
+    notifyListeners();
     uploadUserData();
   }
 
@@ -88,6 +101,7 @@ class MovieProvider extends ChangeNotifier {
       await userDoc.set({
         'email': email,
         'movies': myList.map((movie) => movie.toJson()).toList(),
+        'watched': watchedList.map((movie) => movie.toJson()).toList(),
       }, SetOptions(merge: true));
 
       log('User data uploaded successfully');
@@ -101,9 +115,6 @@ class MovieProvider extends ChangeNotifier {
     final User? user = auth.currentUser;
     final uid = user!.uid;
     final email = user.email;
-
-    // print(email);
-
     if (email == null) {
       log('No user logged in');
       return;
@@ -118,8 +129,13 @@ class MovieProvider extends ChangeNotifier {
         Map<String, dynamic> userData =
             userSnapshot.data() as Map<String, dynamic>;
         List<dynamic> moviesData = userData['movies'] as List<dynamic>;
+        List<dynamic> watchedMovies = userData['watched'] as List<dynamic>;
 
         myList = moviesData
+            .map((movieData) =>
+                Movie.fromJson(movieData as Map<String, dynamic>))
+            .toList();
+        watchedList = watchedMovies
             .map((movieData) =>
                 Movie.fromJson(movieData as Map<String, dynamic>))
             .toList();
@@ -208,15 +224,15 @@ class MovieProvider extends ChangeNotifier {
   }
 
   Future<void> fetchAll() async {
-    fetchPopularMovies();
-    fetchTopRatedMovies();
-    fetchActionMovies();
-    fetchTopSearches();
-    fetchUpcomingMovies();
+    await fetchPopularMovies();
+    await fetchTopRatedMovies();
+    await fetchActionMovies();
+    await fetchTopSearches();
+    await fetchUpcomingMovies();
 
-    fetchAiringTvShows();
-    fetchDramaTvShows();
-    fetchAnimationTvShows();
+    await fetchAiringTvShows();
+    await fetchDramaTvShows();
+    await fetchAnimationTvShows();
   }
 
   void _popularListener() {
